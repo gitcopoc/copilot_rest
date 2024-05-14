@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +36,26 @@ public class AutomationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/automation/getData")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"id\":1,\"name\":\"Test\",\"email\":\"test@example.com\"}"));
+    }
+
+    @Test
+    public void testSaveAutoCopilot() throws Exception {
+        AutoCopilot autoCopilot = new AutoCopilot();
+        autoCopilot.setName("Test");
+        autoCopilot.setEmail("test@example.com");
+
+        AutoCopilot savedAutoCopilot = new AutoCopilot();
+        savedAutoCopilot.setId(1L);
+        savedAutoCopilot.setName("Test");
+        savedAutoCopilot.setEmail("test@example.com");
+
+        when(service.saveAutoCopilot(any(AutoCopilot.class))).thenReturn(savedAutoCopilot);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/automation/saveData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Test\",\"email\":\"test@example.com\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":1,\"name\":\"Test\",\"email\":\"test@example.com\"}"));
     }

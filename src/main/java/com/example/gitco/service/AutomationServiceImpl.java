@@ -15,4 +15,9 @@ public class AutomationServiceImpl implements AutomationService {
     public AutoCopilot getAllAutomatedCode() {
         return repository.findById(Long.valueOf(1)).orElse(new AutoCopilot());
     }
+
+    @Override
+    public AutoCopilot saveAutoCopilot(AutoCopilot autoCopilot) {
+        return repository.save(autoCopilot);
+    }
 }
